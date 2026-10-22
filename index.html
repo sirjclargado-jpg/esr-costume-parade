@@ -7,53 +7,98 @@
   <style>
     * { box-sizing: border-box; }
     body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f6f9;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      /* Forest Green to Deep Emerald Gradient */
+      background: linear-gradient(135deg, #0d3b1e 0%, #1a5e34 100%);
       display: flex;
       justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
       padding: 20px;
     }
     .card {
-      background: white;
-      padding: 30px;
+      background: #ffffff;
+      padding: 35px 30px;
       border-radius: 12px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      /* Gold Top Border & Soft Shadow */
+      border-top: 6px solid #d4af37;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
       width: 100%;
       max-width: 480px;
     }
-    h2 { color: #2c3e50; text-align: center; margin-top: 0; }
-    label { font-weight: bold; margin-top: 15px; display: block; color: #444; }
+    h2 { 
+      color: #0d3b1e; 
+      text-align: center; 
+      margin-top: 0; 
+      margin-bottom: 5px;
+      font-size: 24px;
+    }
+    .subtitle {
+      text-align: center; 
+      color: #d4af37; 
+      font-weight: bold;
+      font-size: 14px;
+      margin-bottom: 20px;
+      letter-spacing: 0.5px;
+    }
+    label { 
+      font-weight: 600; 
+      margin-top: 15px; 
+      display: block; 
+      color: #1a5e34; 
+      font-size: 14px;
+    }
     input, select {
       width: 100%;
-      padding: 10px;
-      margin-top: 5px;
-      border: 1px solid #ccc;
+      padding: 10px 12px;
+      margin-top: 6px;
+      border: 1px solid #c8d6ca;
       border-radius: 6px;
       font-size: 14px;
+      background-color: #fcfdfc;
+      transition: border-color 0.2s;
+    }
+    input:focus, select:focus {
+      outline: none;
+      border-color: #d4af37;
+      box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2);
     }
     button {
       width: 100%;
       padding: 12px;
       margin-top: 25px;
-      background-color: #27ae60;
-      color: white;
+      /* Gold Button Background */
+      background-color: #d4af37;
+      color: #0d3b1e;
       border: none;
       border-radius: 6px;
       font-size: 16px;
       cursor: pointer;
       font-weight: bold;
+      transition: background-color 0.2s, transform 0.1s;
     }
-    button:hover { background-color: #219150; }
-    #statusMessage { margin-top: 15px; text-align: center; font-weight: bold; }
-    .success { color: green; }
-    .error { color: red; }
+    button:hover { 
+      background-color: #c29d2b; 
+    }
+    button:active {
+      transform: scale(0.99);
+    }
+    #statusMessage { 
+      margin-top: 20px; 
+      text-align: center; 
+      font-weight: bold; 
+      font-size: 14px;
+    }
+    .success { color: #1a5e34; }
+    .error { color: #b71c1c; }
   </style>
 </head>
 <body>
 
   <div class="card">
     <h2>ESR Costume Parade</h2>
-    <p style="text-align: center; color: #666; font-size: 14px;">Single Registration Form</p>
+    <div class="subtitle">Official Registration Form</div>
     
     <form id="registrationForm">
       <label for="fullName">Full Name</label>
@@ -81,7 +126,7 @@
       <label for="contactNumber">Contact Number</label>
       <input type="tel" id="contactNumber" required pattern="[0-9]{11}" placeholder="09123456789">
 
-      <button type="submit" id="submitBtn">Register</button>
+      <button type="submit" id="submitBtn">Register Now</button>
     </form>
 
     <div id="statusMessage"></div>
@@ -129,14 +174,14 @@
           statusMessage.className = "error";
           statusMessage.innerText = data.message;
           submitBtn.disabled = false;
-          submitBtn.innerText = "Register";
+          submitBtn.innerText = "Register Now";
         }
       })
       .catch(error => {
         statusMessage.className = "error";
         statusMessage.innerText = "Something went wrong. Please try again.";
         submitBtn.disabled = false;
-        submitBtn.innerText = "Register";
+        submitBtn.innerText = "Register Now";
       });
     });
   </script>
