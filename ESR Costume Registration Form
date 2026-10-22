@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ESR Costume Parade Registration</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f6f9;
+      display: flex;
+      justify-content: center;
+      padding: 20px;
+    }
+    .card {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 480px;
+    }
+    h2 { color: #2c3e50; text-align: center; margin-top: 0; }
+    label { font-weight: bold; margin-top: 15px; display: block; color: #444; }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 25px;
+      background-color: #27ae60;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    button:hover { background-color: #219150; }
+    #statusMessage { margin-top: 15px; text-align: center; font-weight: bold; }
+    .success { color: green; }
+    .error { color: red; }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h2>ESR Costume Parade</h2>
+    <p style="text-align: center; color: #666; font-size: 14px;">Single Registration Form</p>
+    
+    <form id="registrationForm">
+      <label for="fullName">Full Name</label>
+      <input type="text" id="fullName" required placeholder="e.g. Juan Cruz">
+
+      <label for="gradeLevel">Grade Level</label>
+      <select id="gradeLevel" required>
+        <option value="">Select Grade Level</option>
+        <option value="Grade 7">Grade 7</option>
+        <option value="Grade 8">Grade 8</option>
+        <option value="Grade 9">Grade 9</option>
+        <option value="Grade 10">Grade 10</option>
+        <option value="Grade 11">Grade 11</option>
+        <option value="Grade 12">Grade 12</option>
+      </select>
+
+      <label for="costumeCategory">Costume Category</label>
+      <select id="costumeCategory" required>
+        <option value="">Select Category</option>
+        <option value="UN Costume">UN Costume</option>
+        <option value="Halloween Costume">Halloween Costume</option>
+        <option value="Cartoon Character">Cartoon Character</option>
+      </select>
+
+      <label for="contactNumber">Contact Number</label>
+      <input type="tel" id="contactNumber" required pattern="[0-9]{11}" placeholder="09123456789">
+
+      <button type="submit" id="submitBtn">Register</button>
+    </form>
+
+    <div id="statusMessage"></div>
+  </div>
+
+  <script>
+    // Local storage check for single submission per device/browser
+    if (localStorage.getItem("esr_parade_registered")) {
+      document.getElementById("registrationForm").style.display = "none";
+      document.getElementById("statusMessage").innerHTML = "<p class='error'>You have already registered on this device.</p>";
+    }
+
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbyPUM8l2xAlRq91NW-ZVdMQsVzAAW7odSc84ShJx_hGqK0WDYtBBHIKzSK336Q992rIHA/exec';
+    const form = document.getElementById('registrationForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const statusMessage = document.getElementById('statusMessage');
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+
+      submitBtn.disabled = true;
+      submitBtn.innerText = "Submitting...";
+      statusMessage.innerText = "";
+
+      const payload = {
+        fullName: document.getElementById('fullName').value,
+        gradeLevel: document.getElementById('gradeLevel').value,
+        costumeCategory: document.getElementById('costumeCategory').value,
+        contactNumber: document.getElementById('contactNumber').value
+      };
+
+      fetch(scriptURL, {
+        method: 'POST',
+        body: JSON.stringify(payload)
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.result === "success") {
+          localStorage.setItem("esr_parade_registered", "true");
+          form.reset();
+          form.style.display = "none";
+          statusMessage.className = "success";
+          statusMessage.innerText = data.message;
+        } else {
+          statusMessage.className = "error";
+          statusMessage.innerText = data.message;
+          submitBtn.disabled = false;
+          submitBtn.innerText = "Register";
+        }
+      })
+      .catch(error => {
+        statusMessage.className = "error";
+        statusMessage.innerText = "Something went wrong. Please try again.";
+        submitBtn.disabled = false;
+        submitBtn.innerText = "Register";
+      });
+    });
+  </script>
+</body>
+</html>
